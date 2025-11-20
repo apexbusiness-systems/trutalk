@@ -13,6 +13,7 @@ export default function Match() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
+      setLoading(false);
       if (!session?.user) {
         navigate("/auth");
       }
@@ -20,10 +21,10 @@ export default function Match() {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      setLoading(false);
       if (!session?.user) {
         navigate("/auth");
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
@@ -48,7 +49,7 @@ export default function Match() {
           <Button variant="outline" onClick={() => navigate("/profile")}>
             Profile
           </Button>
-          <Button variant="outline" onClick={handleSignOut}>
+          <Button variant="ghost" onClick={handleSignOut}>
             Sign Out
           </Button>
         </div>
@@ -58,13 +59,10 @@ export default function Match() {
         <Card>
           <CardHeader>
             <CardTitle>Find Your Match</CardTitle>
-            <CardDescription>Connect with someone new for a voice conversation</CardDescription>
+            <CardDescription>Connect with someone new through voice</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              Ready to connect? We'll match you with someone who shares your interests.
-            </p>
-            <Button size="lg" className="w-full">
+          <CardContent className="flex flex-col items-center justify-center p-12">
+            <Button size="lg" className="text-lg">
               Start Matching
             </Button>
           </CardContent>

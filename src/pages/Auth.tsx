@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,39 +7,41 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleAuth = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
         if (error) throw error;
-        toast({ title: "Welcome back!" });
-        navigate("/match");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/match`,
-          },
         });
         if (error) throw error;
-        toast({ title: "Account created! Check your email to verify." });
+        toast({
+          title: "Check your email",
+          description: "We've sent you a confirmation link.",
+        });
       }
+      navigate("/match");
     } catch (error: any) {
       toast({
+        variant: "destructive",
         title: "Error",
         description: error.message,
-        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -47,31 +49,37 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{isLogin ? "Welcome Back" : "Create Account"}</CardTitle>
+          <CardTitle>{isLogin ? "Sign In" : "Create Account"}</CardTitle>
           <CardDescription>
-            {isLogin ? "Sign in to continue your conversations" : "Join TRU Talk to start connecting"}
+            {isLogin ? "Welcome back to TRU Talk" : "Join TRU Talk today"}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">
-            <div>
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
               <Input
+                id="email"
                 type="email"
-                placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 required
               />
             </div>
-            <div>
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">
+                Password
+              </label>
               <Input
+                id="password"
                 type="password"
-                placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 required
               />
             </div>
@@ -79,15 +87,13 @@ export default function Auth() {
               {loading ? "Loading..." : isLogin ? "Sign In" : "Sign Up"}
             </Button>
           </form>
-          <div className="mt-4 text-center">
-            <button
-              type="button"
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
-              {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
-            </button>
-          </div>
+          <Button
+            variant="ghost"
+            className="w-full mt-4"
+            onClick={() => setIsLogin(!isLogin)}
+          >
+            {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
+          </Button>
         </CardContent>
       </Card>
     </div>
