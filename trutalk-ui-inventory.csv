@@ -1,0 +1,5 @@
+app,route_or_screen_id,lovable_screen_filename,screenshot_path,component_file_path,primary_components,notes
+packages/backend,N/A - Backend API,N/A,N/A,packages/backend/api/*,Serverless Functions,"Backend only - verify-phone, transcribe, vectorize, find-match, start-call, call-webhook, stripe-webhook, daily-drop, cleanup"
+packages/ai,N/A - AI Services,N/A,N/A,packages/ai/src/*,"Translation Orchestrator, DeepL, Google Cloud","AI translation layer - deepl.ts, google-cloud.ts, translation-orchestrator.ts"
+packages/shared,N/A - Shared Types,N/A,N/A,packages/shared/src/*,"Types, Validators, Utils","Shared TypeScript types, Zod validators, utility functions"
+src,Root Web App,N/A,N/A,src/integrations/supabase/*,Supabase Client,"Minimal web app structure - only Supabase integration present"

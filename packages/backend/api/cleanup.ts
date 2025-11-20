@@ -10,7 +10,7 @@ import { createErrorResponse } from '@trutalk/shared';
  * Deletes expired voice clips (60s retention) and old data
  *
  * Called via CRON job every 5 minutes
- * Schedule: */5 * * * *
+ * Schedule: every 5 minutes (cron expression)
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Verify CRON secret
