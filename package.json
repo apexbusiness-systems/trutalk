@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "build:dev": "vite build --mode development",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "deploy:supabase": "./scripts/deploy-supabase.sh",
