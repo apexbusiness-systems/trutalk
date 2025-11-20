@@ -102,12 +102,20 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
   }
 
   // Update user's Echo Chips
-  await supabase
+  const { data: user } = await supabase
     .from('users')
-    .update({
-      echo_chips: supabase.sql`echo_chips + ${chipsAmount}`,
-    })
-    .eq('id', userId);
+    .select('echo_chips')
+    .eq('id', userId)
+    .single();
+
+  if (user) {
+    await supabase
+      .from('users')
+      .update({
+        echo_chips: (user.echo_chips || 0) + chipsAmount,
+      })
+      .eq('id', userId);
+  }
 
   // Record transaction
   await supabase.from('transactions').insert({

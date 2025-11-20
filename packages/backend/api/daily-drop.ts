@@ -58,12 +58,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Batch update users
     for (const update of updates) {
-      await supabase
+      const { data: user } = await supabase
         .from('users')
-        .update({
-          echo_chips: supabase.sql`echo_chips + ${update.chips}`,
-        })
-        .eq('id', update.user_id);
+        .select('echo_chips')
+        .eq('id', update.user_id)
+        .single();
+
+      if (user) {
+        await supabase
+          .from('users')
+          .update({
+            echo_chips: (user.echo_chips || 0) + update.chips,
+          })
+          .eq('id', update.user_id);
+      }
 
       // Record transaction
       await supabase.from('transactions').insert({

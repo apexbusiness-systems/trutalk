@@ -88,8 +88,8 @@ export async function transcribeAudioGoogle(
 
     const words = alternative.words?.map((wordInfo) => ({
       word: wordInfo.word || '',
-      startTime: parseFloat(wordInfo.startTime?.seconds || '0'),
-      endTime: parseFloat(wordInfo.endTime?.seconds || '0'),
+      startTime: parseFloat(String(wordInfo.startTime?.seconds || 0)),
+      endTime: parseFloat(String(wordInfo.endTime?.seconds || 0)),
     })) || [];
 
     return {

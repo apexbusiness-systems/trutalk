@@ -41,27 +41,27 @@ export async function translateText(
   preserveFormatting: boolean = true
 ): Promise<TranslationResult> {
   try {
-    const options: deepl.TranslateTextOptions = {
-      preserveFormatting,
-      formality: 'default', // Can be 'more' or 'less' for tone
-    };
-
-    if (sourceLanguage) {
-      options.sourceLang = sourceLanguage.toUpperCase() as deepl.SourceLanguageCode;
-    }
+    const sourceLang = sourceLanguage 
+      ? (sourceLanguage.toUpperCase() as deepl.SourceLanguageCode)
+      : null;
 
     const result = await translator.translateText(
       text,
-      null, // Auto-detect source if not specified
+      sourceLang,
       targetLanguage.toUpperCase() as deepl.TargetLanguageCode,
-      options
+      {
+        preserveFormatting,
+        formality: 'default' as deepl.Formality,
+      }
     );
 
+    const resultItem = Array.isArray(result) ? result[0] : result;
+
     return {
-      text: result.text,
-      sourceLanguage: result.detectedSourceLang?.toLowerCase() || sourceLanguage || 'auto',
+      text: resultItem.text,
+      sourceLanguage: resultItem.detectedSourceLang?.toLowerCase() || sourceLanguage || 'auto',
       targetLanguage: targetLanguage.toLowerCase(),
-      detectedLanguage: result.detectedSourceLang?.toLowerCase(),
+      detectedLanguage: resultItem.detectedSourceLang?.toLowerCase(),
     };
 
   } catch (error) {
@@ -79,25 +79,24 @@ export async function translateBatch(
   sourceLanguage?: string
 ): Promise<TranslationResult[]> {
   try {
+    const sourceLang = sourceLanguage
+      ? (sourceLanguage.toUpperCase() as deepl.SourceLanguageCode)
+      : null;
+
     const results = await translator.translateText(
       texts,
-      sourceLanguage?.toUpperCase() as deepl.SourceLanguageCode || null,
+      sourceLang,
       targetLanguage.toUpperCase() as deepl.TargetLanguageCode
     );
 
-    return Array.isArray(results)
-      ? results.map((result) => ({
-          text: result.text,
-          sourceLanguage: result.detectedSourceLang?.toLowerCase() || sourceLanguage || 'auto',
-          targetLanguage: targetLanguage.toLowerCase(),
-          detectedLanguage: result.detectedSourceLang?.toLowerCase(),
-        }))
-      : [{
-          text: results.text,
-          sourceLanguage: results.detectedSourceLang?.toLowerCase() || sourceLanguage || 'auto',
-          targetLanguage: targetLanguage.toLowerCase(),
-          detectedLanguage: results.detectedSourceLang?.toLowerCase(),
-        }];
+    const resultArray = Array.isArray(results) ? results : [results];
+
+    return resultArray.map((result) => ({
+      text: result.text,
+      sourceLanguage: result.detectedSourceLang?.toLowerCase() || sourceLanguage || 'auto',
+      targetLanguage: targetLanguage.toLowerCase(),
+      detectedLanguage: result.detectedSourceLang?.toLowerCase(),
+    }));
 
   } catch (error) {
     console.error('DeepL batch translation error:', error);
@@ -108,7 +107,7 @@ export async function translateBatch(
 /**
  * Get available languages
  */
-export async function getAvailableLanguages(): Promise<deepl.Language[]> {
+export async function getAvailableLanguages(): Promise<readonly deepl.Language[]> {
   try {
     return await translator.getTargetLanguages();
   } catch (error) {

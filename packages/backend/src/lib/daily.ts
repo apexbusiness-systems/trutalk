@@ -41,7 +41,7 @@ export async function createCallRoom(roomName: string): Promise<DailyRoom> {
       throw new Error(`Daily API error: ${response.statusText}`);
     }
 
-    return await response.json();
+    return (await response.json()) as DailyRoom;
   } catch (error) {
     console.error('Daily room creation error:', error);
     throw new Error('Failed to create call room');
@@ -80,7 +80,7 @@ export async function getMeetingToken(roomName: string, userId: string): Promise
       }),
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as { token: string };
     return data.token;
   } catch (error) {
     console.error('Daily token generation error:', error);

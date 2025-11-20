@@ -71,7 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Get user preferences for translation
     const { data: user } = await supabase
       .from('users')
-      .select('preferred_languages, translation_enabled')
+      .select('preferred_languages, translation_enabled, fcm_token')
       .eq('id', user_id)
       .single();
 
@@ -79,7 +79,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const { data: otherUser } = await supabase
       .from('users')
-      .select('preferred_languages, translation_enabled')
+      .select('preferred_languages, translation_enabled, fcm_token')
       .eq('id', otherUserId)
       .single();
 

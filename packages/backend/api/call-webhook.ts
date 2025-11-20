@@ -138,10 +138,20 @@ async function handleCallEnded(event: any) {
     if (duration > 60) { // At least 1 minute
       const rewardChips = Math.min(Math.floor(duration / 60), 10); // Max 10 chips
 
-      await supabase
+      // Get current chip counts
+      const { data: users } = await supabase
         .from('users')
-        .update({ echo_chips: supabase.sql`echo_chips + ${rewardChips}` })
+        .select('id, echo_chips')
         .in('id', [call.user_id_1, call.user_id_2]);
+
+      if (users) {
+        for (const user of users) {
+          await supabase
+            .from('users')
+            .update({ echo_chips: (user.echo_chips || 0) + rewardChips })
+            .eq('id', user.id);
+        }
+      }
 
       // Log transactions
       await supabase.from('transactions').insert([
