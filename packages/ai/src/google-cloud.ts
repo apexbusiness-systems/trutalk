@@ -86,7 +86,7 @@ export async function transcribeAudioGoogle(
       throw new Error('No alternative transcription');
     }
 
-    const words = alternative.words?.map((wordInfo) => ({
+    const words = alternative.words?.map((wordInfo: any) => ({
       word: wordInfo.word || '',
       startTime: parseFloat(String(wordInfo.startTime?.seconds || 0)),
       endTime: parseFloat(String(wordInfo.endTime?.seconds || 0)),
@@ -186,7 +186,7 @@ export async function* streamTranscribe(
       },
       interimResults: true,
     })
-    .on('error', (error) => {
+    .on('error', (error: any) => {
       console.error('Streaming error:', error);
     });
 
