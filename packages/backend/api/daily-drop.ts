@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
-import { createErrorResponse, APIError } from '@trutalk/shared';
+import { createErrorResponse, APIError } from '../../shared/src/utils';
 
 /**
  * Daily Drop Endpoint

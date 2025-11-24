@@ -1,8 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
 import { createCallRoom, getMeetingToken } from '../src/lib/daily';
-import { startCallSchema } from '@trutalk/shared';
-import { createErrorResponse, APIError } from '@trutalk/shared';
+import { startCallSchema } from '../../shared/src/validators';
+import { createErrorResponse, APIError } from '../../shared/src/utils';
 
 /**
  * Start Call Endpoint

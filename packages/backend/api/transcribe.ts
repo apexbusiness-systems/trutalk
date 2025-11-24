@@ -1,8 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
 import { transcribeAudio } from '../src/lib/openai';
-import { transcribeSchema } from '@trutalk/shared';
-import { createErrorResponse, APIError } from '@trutalk/shared';
+import { transcribeSchema } from '../../shared/src/validators';
+import { createErrorResponse, APIError } from '../../shared/src/utils';
 
 /**
  * Transcribe Voice Clip Endpoint

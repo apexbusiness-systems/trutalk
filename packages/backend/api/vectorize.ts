@@ -1,8 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
 import { extractEmotionVectors } from '../src/lib/openai';
-import { vectorizeSchema } from '@trutalk/shared';
-import { createErrorResponse, APIError } from '@trutalk/shared';
+import { vectorizeSchema } from '../../shared/src/validators';
+import { createErrorResponse, APIError } from '../../shared/src/utils';
 
 /**
  * Vectorize Voice Clip Endpoint

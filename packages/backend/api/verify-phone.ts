@@ -1,8 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
 import { sendVerificationCode, checkVerificationCode } from '../src/lib/twilio';
-import { verifyPhoneSchema } from '@trutalk/shared';
-import { createErrorResponse, APIError } from '@trutalk/shared';
+import { verifyPhoneSchema } from '../../shared/src/validators';
+import { createErrorResponse, APIError } from '../../shared/src/utils';
 
 /**
  * Verify Phone Number Endpoint

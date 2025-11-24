@@ -2,15 +2,17 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { fileURLToPath } from "url";
-import { componentTagger } from "lovable-tagger";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(async ({ mode, command }) => ({
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
-  ].filter(Boolean),
+    ...(mode === 'development' && command === 'serve' 
+      ? [(await import('lovable-tagger')).componentTagger()] 
+      : []
+    ),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

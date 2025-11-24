@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
 import { deleteCallRoom } from '../src/lib/daily';
-import { createErrorResponse } from '@trutalk/shared';
+import { createErrorResponse } from '../../shared/src/utils';
 
 /**
  * Cleanup Endpoint

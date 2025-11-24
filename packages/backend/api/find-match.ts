@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
-import { findMatchSchema } from '@trutalk/shared';
-import { createErrorResponse, APIError } from '@trutalk/shared';
+import { findMatchSchema } from '../../shared/src/validators';
+import { createErrorResponse, APIError } from '../../shared/src/utils';
 
 /**
  * Find Match Endpoint
