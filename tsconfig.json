@@ -23,6 +23,5 @@
       "@trutalk/ai/*": ["./packages/ai/src/*"]
     }
   },
-  "include": ["src", "supabase", "packages", "apps"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "supabase", "packages", "apps"]
 }
