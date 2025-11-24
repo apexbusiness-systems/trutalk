@@ -4,7 +4,7 @@
  * Handles real-time voice translation with emotion preservation
  */
 
-import { transcribeAudioGoogle, textToSpeechGoogle, detectLanguage } from './google-cloud';
+import { transcribeAudioGoogle, textToSpeechGoogle } from './google-cloud';
 import { translateText, isLanguageSupported, StreamingTranslator } from './deepl';
 import { translateTextGoogle } from './google-cloud';
 
@@ -205,7 +205,7 @@ function mapLanguageCodeToGoogle(languageCode: string): string {
  * Analyze audio for emotion features (advanced)
  * In production, use specialized audio analysis libraries
  */
-export async function analyzeVoiceEmotion(audioBuffer: Buffer): Promise<{
+export async function analyzeVoiceEmotion(_audioBuffer: Buffer): Promise<{
   energy: number;
   pitch: number;
   tempo: number;

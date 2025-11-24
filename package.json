@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "build:dev": "vite build --mode development",
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
