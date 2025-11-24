@@ -1,7 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
 import { generateEchoSummary } from '../src/lib/openai';
-import { createErrorResponse } from '@trutalk/shared';
 
 /**
  * Call Webhook Endpoint
@@ -47,7 +46,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error('Call webhook error:', error);
-    const errorResponse = createErrorResponse(error);
     return res.status(200).json({ received: true }); // Always return 200 to Daily
   }
 }
