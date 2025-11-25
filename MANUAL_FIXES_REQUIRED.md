@@ -4,13 +4,13 @@ The following files are read-only in the Lovable environment and require manual 
 
 ---
 
-## 1. Fix tsconfig.json ⚠️ CRITICAL
+## 1. Fix tsconfig.json ⚠️ CRITICAL - BUILD BLOCKER
 
 **Location**: `tsconfig.json` (root)
 
-**Issue**: References non-existent `tsconfig.node.json` file
+**Issue**: Includes backend `packages` directory which contains Node.js code, causing Vite production build to fail
 
-**Fix**: Remove the `references` line at the end of the file:
+**Fix**: Update the configuration to only include frontend source:
 
 ```json
 {
@@ -32,31 +32,39 @@ The following files are read-only in the Lovable environment and require manual 
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@trutalk/shared/*": ["./packages/shared/src/*"],
-      "@trutalk/backend/*": ["./packages/backend/src/*"],
-      "@trutalk/ai/*": ["./packages/ai/src/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "supabase", "packages", "apps"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "packages", "apps", "supabase"]
 }
 ```
 
-**What Changed**: Removed the `"references": [{ "path": "./tsconfig.node.json" }]` line
+**What Changed**: 
+1. Changed `"include": ["src", "supabase", "packages", "apps"]` to `"include": ["src"]`
+2. Added explicit `"exclude"` array to prevent backend code from being compiled
+3. Removed `@trutalk/*` path aliases (only used by backend, not frontend)
 
-**Why**: The file `tsconfig.node.json` doesn't exist and is not needed for this project configuration.
+**Why**: 
+- The `packages` directory contains Node.js backend code with `process.env` and other Node-specific APIs
+- Vite's production build attempts to compile everything in the `include` array
+- This causes build errors when publishing: "Building the project failed because of build errors"
+- Frontend code only uses the `@/*` alias for `src` directory imports
 
 ---
 
 ## 2. Verify Changes After Fix
 
-After manually updating `tsconfig.json`, run:
+After manually updating `tsconfig.json`, your app will be able to publish successfully! ✅
+
+Run these commands to verify:
 
 ```bash
-npm run typecheck
+npm run typecheck  # Should pass with zero errors
+npm run build      # Should build successfully for production
 ```
 
-Expected result: **Zero TypeScript errors** ✅
+Expected result: **Build succeeds and you can click "Update" to publish!** ✅
 
 ---
 
