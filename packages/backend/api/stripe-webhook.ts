@@ -171,7 +171,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   }
 
   const tier = subscription.metadata.tier || 'premium'; // 'premium' or 'vip'
-  const expiresAt = new Date((subscription.current_period_end as any) * 1000).toISOString();
+  const expiresAt = new Date((subscription as any).current_period_end * 1000).toISOString();
 
   // Update user subscription
   await supabase
