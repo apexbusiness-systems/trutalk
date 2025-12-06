@@ -47,38 +47,29 @@ export default function Landing() {
                 </div>
 
                 {/* Integrated Features - Inside Hero */}
-                <div className="grid md:grid-cols-3 gap-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                  <div className="group relative overflow-hidden rounded-2xl bg-card/30 backdrop-blur-md border border-border/40 p-8 hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5 hover:scale-105">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative z-10">
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <Globe className="w-10 h-10 text-primary-foreground" />
-                      </div>
-                      <h4 className="text-2xl font-bold mb-3 text-foreground">Break Language Barriers</h4>
-                      <p className="text-muted-foreground leading-relaxed">Real-time voice translation lets you connect with anyone, anywhere in the world.</p>
+                <div className="grid md:grid-cols-3 gap-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                  <div className="group rounded-3xl bg-card border border-border p-8 hover:shadow-lg transition-all duration-300">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                      <Globe className="w-7 h-7 text-primary" />
                     </div>
+                    <h4 className="text-xl font-semibold mb-3 text-foreground">Break Language Barriers</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Real-time voice translation lets you connect with anyone, anywhere in the world.</p>
                   </div>
 
-                  <div className="group relative overflow-hidden rounded-2xl bg-card/30 backdrop-blur-md border border-border/40 p-8 hover:border-secondary/50 transition-all duration-500 hover:shadow-xl hover:shadow-secondary/5 hover:scale-105">
-                    <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative z-10">
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-secondary to-secondary/60 flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <Mic className="w-10 h-10 text-secondary-foreground" />
-                      </div>
-                      <h4 className="text-2xl font-bold mb-3 text-foreground">Authentic Conversations</h4>
-                      <p className="text-muted-foreground leading-relaxed">Voice-first connections create deeper, more meaningful relationships.</p>
+                  <div className="group rounded-3xl bg-card border border-border p-8 hover:shadow-lg transition-all duration-300">
+                    <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6">
+                      <Mic className="w-7 h-7 text-secondary" />
                     </div>
+                    <h4 className="text-xl font-semibold mb-3 text-foreground">Authentic Conversations</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Voice-first connections create deeper, more meaningful relationships.</p>
                   </div>
 
-                  <div className="group relative overflow-hidden rounded-2xl bg-card/30 backdrop-blur-md border border-border/40 p-8 hover:border-accent/50 transition-all duration-500 hover:shadow-xl hover:shadow-accent/5 hover:scale-105">
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative z-10">
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <Users className="w-10 h-10 text-accent-foreground" />
-                      </div>
-                      <h4 className="text-2xl font-bold mb-3 text-foreground">Global Community</h4>
-                      <p className="text-muted-foreground leading-relaxed">Join thousands of people making cross-cultural connections daily.</p>
+                  <div className="group rounded-3xl bg-card border border-border p-8 hover:shadow-lg transition-all duration-300">
+                    <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6">
+                      <Users className="w-7 h-7 text-accent" />
                     </div>
+                    <h4 className="text-xl font-semibold mb-3 text-foreground">Global Community</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Join thousands of people making cross-cultural connections daily.</p>
                   </div>
                 </div>
               </div>
