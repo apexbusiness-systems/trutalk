@@ -46,30 +46,30 @@ export default function Landing() {
                   </div>
                 </div>
 
-                {/* Integrated Features - Inside Hero */}
-                <div className="grid md:grid-cols-3 gap-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                  <div className="group rounded-3xl bg-card border border-border p-8 hover:shadow-lg transition-all duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
-                      <Globe className="w-7 h-7 text-primary" />
+                {/* Feature Cards - Clean minimal layout */}
+                <div className="grid md:grid-cols-3 gap-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                  <div className="rounded-2xl bg-muted/50 p-6">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+                      <Globe className="w-6 h-6 text-primary" />
                     </div>
-                    <h4 className="text-xl font-semibold mb-3 text-foreground">Break Language Barriers</h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">Real-time voice translation lets you connect with anyone, anywhere in the world.</p>
+                    <h4 className="text-lg font-semibold text-foreground mb-2">Break Language Barriers</h4>
+                    <p className="text-muted-foreground text-sm">Real-time voice translation lets you connect with anyone, anywhere.</p>
                   </div>
 
-                  <div className="group rounded-3xl bg-card border border-border p-8 hover:shadow-lg transition-all duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6">
-                      <Mic className="w-7 h-7 text-secondary" />
+                  <div className="rounded-2xl bg-muted/50 p-6">
+                    <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center mb-4">
+                      <Mic className="w-6 h-6 text-secondary" />
                     </div>
-                    <h4 className="text-xl font-semibold mb-3 text-foreground">Authentic Conversations</h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">Voice-first connections create deeper, more meaningful relationships.</p>
+                    <h4 className="text-lg font-semibold text-foreground mb-2">Authentic Conversations</h4>
+                    <p className="text-muted-foreground text-sm">Voice-first connections create deeper, more meaningful relationships.</p>
                   </div>
 
-                  <div className="group rounded-3xl bg-card border border-border p-8 hover:shadow-lg transition-all duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6">
-                      <Users className="w-7 h-7 text-accent" />
+                  <div className="rounded-2xl bg-muted/50 p-6">
+                    <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4">
+                      <Users className="w-6 h-6 text-accent" />
                     </div>
-                    <h4 className="text-xl font-semibold mb-3 text-foreground">Global Community</h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">Join thousands of people making cross-cultural connections daily.</p>
+                    <h4 className="text-lg font-semibold text-foreground mb-2">Global Community</h4>
+                    <p className="text-muted-foreground text-sm">Join thousands making cross-cultural connections daily.</p>
                   </div>
                 </div>
               </div>
