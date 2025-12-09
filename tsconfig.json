@@ -23,5 +23,6 @@
       "@trutalk/ai/*": ["./packages/ai/src/*"]
     }
   },
-  "include": ["src", "supabase", "packages", "apps"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "packages", "apps", "supabase"]
 }
