@@ -6,13 +6,15 @@ module.exports = function (api) {
       [
         'module-resolver',
         {
+          root: ['./'],
           alias: {
-            '@': './src',
-            '@shared': '../../packages/shared'
+            '@': './',
+            '@shared': '../../packages/shared/src'
           },
           extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
         }
-      ]
+      ],
+      'react-native-reanimated/plugin'
     ]
   };
 };

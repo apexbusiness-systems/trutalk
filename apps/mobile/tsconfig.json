@@ -7,7 +7,7 @@
     "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./*"],
       "@shared/*": ["../../packages/shared/*"]
     },
     "allowJs": true,
@@ -17,6 +17,6 @@
     "strict": true,
     "noEmit": true
   },
-  "include": ["src/**/*", "App.tsx", "index.d.ts"],
+  "include": ["app/**/*", "components/**/*", "hooks/**/*", "lib/**/*", "App.tsx", "*.ts", "*.tsx"],
   "exclude": ["node_modules"]
 }

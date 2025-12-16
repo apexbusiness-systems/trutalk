@@ -1,0 +1,96 @@
+{
+  "expo": {
+    "name": "TRU Talk",
+    "slug": "trutalk-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a0a"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trutalk.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "TRU Talk needs access to your microphone to record voice clips and make calls.",
+        "NSCameraUsageDescription": "TRU Talk needs access to your camera for video calls.",
+        "NSPhotoLibraryUsageDescription": "TRU Talk needs access to your photos to share profile pictures."
+      },
+      "associatedDomains": [
+        "applinks:trutalk.com",
+        "applinks:www.trutalk.com"
+      ]
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0a0a"
+      },
+      "package": "com.trutalk.app",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "trutalk.com",
+              "pathPrefix": "/call"
+            },
+            {
+              "scheme": "https",
+              "host": "www.trutalk.com",
+              "pathPrefix": "/call"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow TRU Talk to access your microphone to record voice clips and make calls."
+        }
+      ]
+    ],
+    "scheme": "trutalk",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/your-project-id"
+    }
+  }
+}
+
+
