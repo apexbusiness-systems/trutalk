@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "@/lib/error-boundary";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
+import { isNativeApp } from "@/lib/platform";
 
 // Lazy load pages for code splitting and better performance
 const Landing = lazy(() => import("@/pages/Landing"));
@@ -26,18 +27,50 @@ const LoadingFallback = () => (
   </div>
 );
 
+// Native app entry point - skips marketing landing
+function NativeAppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/auth" replace />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/match" element={<Match />} />
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
+  );
+}
+
+// Web routes - includes marketing landing
+function WebRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/match" element={<Match />} />
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
+  );
+}
+
 function App() {
+  const [isNative, setIsNative] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    // Check platform on mount
+    setIsNative(isNativeApp());
+    setReady(true);
+  }, []);
+
+  if (!ready) {
+    return <LoadingFallback />;
+  }
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <Router>
           <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/match" element={<Match />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
+            {isNative ? <NativeAppRoutes /> : <WebRoutes />}
           </Suspense>
         </Router>
         <Toaster />
