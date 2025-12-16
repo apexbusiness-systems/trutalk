@@ -44,13 +44,21 @@ trutalk/
 
 ## 🎯 Native Mobile App (`apps/mobile`)
 
-### Technology Stack
+> **Note**: The project currently uses **Expo** for the mobile app. The intended architecture uses **Capacitor** to wrap the Next.js web app for native deployment. See [Native App Architecture](./NATIVE_APP_ARCHITECTURE.md) for Capacitor setup instructions.
+
+### Current Implementation (Expo)
 - **Framework**: React Native with Expo
 - **Navigation**: Expo Router (file-based routing)
 - **State Management**: React Query + Zustand
 - **UI Library**: React Native Paper / NativeBase
 - **Voice**: Expo AV, react-native-audio-recorder-player
 - **WebRTC**: Daily.co React Native SDK
+
+### Intended Architecture (Capacitor)
+- **Framework**: Next.js (shared with web)
+- **Native Wrapper**: Capacitor
+- **Benefits**: Code sharing between web and native, single codebase
+- **Setup**: See [Native App Architecture Guide](./NATIVE_APP_ARCHITECTURE.md)
 
 ### App Structure
 ```
