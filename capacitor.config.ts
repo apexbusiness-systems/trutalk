@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.9b20b04ef48e4b57809c83cc21a8b334',
+  appId: 'com.trutalk.app',
   appName: 'trutalk',
   webDir: 'dist',
   server: {
