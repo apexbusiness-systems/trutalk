@@ -112,3 +112,4 @@ echo "  2. Set up environment variables (.env files)"
 echo "  3. Run 'npm run typecheck' to verify TypeScript"
 echo "  4. Run 'npm test' to run tests"
 
+
