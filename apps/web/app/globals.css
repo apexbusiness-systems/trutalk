@@ -36,52 +36,16 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
-  }
-  
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-background;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-muted rounded-full;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/50;
   }
 }
 
 @layer utilities {
-  /* Premium gradient text */
   .gradient-text {
     @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
     background-size: 200% 200%;
     animation: gradient-shift 3s ease infinite;
   }
-  
-  /* Glass morphism effect */
-  .glass {
-    @apply bg-background/80 backdrop-blur-xl border border-border/50;
-  }
-  
-  /* Shimmer loading effect */
-  .shimmer {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--muted)) 0%,
-      hsl(var(--muted-foreground) / 0.2) 50%,
-      hsl(var(--muted)) 100%
-    );
-    background-size: 1000px 100%;
-    animation: shimmer 2s linear infinite;
-  }
 }
+
