@@ -8,7 +8,6 @@ import { EmotionIndicator } from './EmotionIndicator';
 export function VoiceRecorder() {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [detectedEmotion, setDetectedEmotion] = useState<string | null>(null);
@@ -90,12 +89,6 @@ export function VoiceRecorder() {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }
-
-  async function playSound(uri: string) {
-    const { sound } = await Audio.Sound.createAsync({ uri });
-    setSound(sound);
-    await sound.playAsync();
   }
 
   return (

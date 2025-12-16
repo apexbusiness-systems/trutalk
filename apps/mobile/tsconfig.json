@@ -7,7 +7,7 @@
     "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./*"],
       "@shared/*": ["../../packages/shared/*"]
     },
     "allowJs": true,

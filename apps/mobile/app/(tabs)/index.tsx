@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/hooks/use-auth';
 import { VoiceRecorder } from '@/components/voice/VoiceRecorder';
 import { useRouter } from 'expo-router';
 
@@ -12,25 +11,8 @@ interface MatchStatus {
 }
 
 export default function MatchScreen() {
-  const { user } = useAuth();
   const router = useRouter();
   const [matchStatus, setMatchStatus] = useState<MatchStatus>({ status: 'idle' });
-  const [isMatching, setIsMatching] = useState(false);
-
-  const handleRecordingComplete = async () => {
-    setMatchStatus({ status: 'processing' });
-    setIsMatching(true);
-
-    // Simulate matching process
-    setTimeout(() => {
-      setMatchStatus({
-        status: 'found',
-        matchId: 'match_123',
-        similarity: 0.87,
-      });
-      setIsMatching(false);
-    }, 2000);
-  };
 
   const handleStartCall = () => {
     if (matchStatus.matchId) {
