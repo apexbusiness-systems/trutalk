@@ -77,6 +77,14 @@ The native mobile app is built using **Capacitor**, which wraps the web app for 
    ```
    This copies the built web app to the native projects.
 
+7. **Fix iOS Deployment Target** (if needed)
+   ```bash
+   # If you get a CocoaPods error about deployment target, run:
+   node scripts/fix-ios-deployment-target.mjs
+   cd ios/App
+   pod install
+   ```
+
 7. **Run on Device/Simulator**
    ```bash
    # iOS (requires Xcode)
@@ -303,6 +311,32 @@ For faster development, use Capacitor's live reload:
    npx cap run ios -l
    npx cap run android -l
    ```
+
+## 🐛 Troubleshooting
+
+### iOS Deployment Target Error
+
+If you encounter this error during `npx cap sync ios`:
+```
+[!] CocoaPods could not find compatible versions for pod "CapacitorStatusBar":
+Specs satisfying the `CapacitorStatusBar` dependency were found, but they required a higher minimum deployment target.
+```
+
+**Fix**: The iOS deployment target must be 13.0 or higher. Run the fix script:
+```bash
+bash scripts/fix-ios-deployment-target.sh
+```
+
+Or manually update `ios/App/App/Podfile`:
+```ruby
+platform :ios, '13.0'
+```
+
+Then run:
+```bash
+cd ios/App
+pod install
+```
 
 ## 📝 Notes
 
