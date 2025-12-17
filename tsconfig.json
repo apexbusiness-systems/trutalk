@@ -17,10 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@trutalk/shared/*": ["./packages/shared/src/*"],
-      "@trutalk/backend/*": ["./packages/backend/src/*"],
-      "@trutalk/ai/*": ["./packages/ai/src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],
