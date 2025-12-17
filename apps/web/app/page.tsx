@@ -6,10 +6,22 @@ import { Globe, Mic, Users, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
+// Generate stable random values for particles (SSR-safe)
+const particleSeeds = Array.from({ length: 20 }, (_, i) => ({
+  id: i,
+  leftPercent: ((i * 17 + 13) % 100),
+  topPercent: ((i * 23 + 7) % 100),
+  xOffset: ((i * 31 + 11) % 200) - 100,
+  yOffset: ((i * 37 + 19) % 200) - 100,
+  duration: 3 + (i % 3),
+}));
+
 export default function HomePage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -21,26 +33,23 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-background relative overflow-hidden">
       {/* Animated background particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {isClient && particleSeeds.map((particle) => (
           <motion.div
-            key={i}
+            key={particle.id}
             className="absolute w-2 h-2 bg-primary/20 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
+            initial={false}
             animate={{
-              x: mousePosition.x + (Math.random() - 0.5) * 200,
-              y: mousePosition.y + (Math.random() - 0.5) * 200,
+              x: mousePosition.x + particle.xOffset,
+              y: mousePosition.y + particle.yOffset,
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: particle.duration,
               repeat: Infinity,
               repeatType: 'reverse',
             }}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${particle.leftPercent}%`,
+              top: `${particle.topPercent}%`,
             }}
           />
         ))}
