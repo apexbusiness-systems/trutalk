@@ -1,11 +1,12 @@
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Globe, Mic, Users } from "lucide-react";
 
 export default function Landing() {
-  const scrollToFeatures = () => {
+  const scrollToFeatures = useCallback(() => {
     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

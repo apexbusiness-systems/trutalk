@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/monitoring';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -24,7 +25,7 @@ export function useAuth() {
             description: 'You have been signed out successfully.',
           });
         } else if (event === 'TOKEN_REFRESHED') {
-          console.log('Session refreshed successfully');
+          logger.debug('Session refreshed successfully');
         } else if (event === 'SIGNED_IN') {
           toast({
             title: 'Welcome back!',

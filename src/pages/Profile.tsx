@@ -1,30 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Profile() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (!session?.user) {
-        navigate("/auth");
-      }
-    });
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (!session?.user) {
-        navigate("/auth");
-      }
-    });
-
-    return () => subscription.unsubscribe();
+  const handleNavigateToMatch = useCallback(() => {
+    navigate("/match");
   }, [navigate]);
 
   return (
@@ -33,7 +24,7 @@ export default function Profile() {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
           TRU Talk
         </h1>
-        <Button variant="outline" onClick={() => navigate("/match")}>
+        <Button variant="outline" onClick={handleNavigateToMatch}>
           Back to Match
         </Button>
       </header>

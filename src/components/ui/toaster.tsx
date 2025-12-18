@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useToast, type ToasterToast } from "@/hooks/use-toast";
 import {
   Toast,
   ToastClose,
@@ -14,7 +14,7 @@ export function Toaster() {
   return (
     <ToastProvider>
       {toasts.map(function (
-        { id, title, description, action, ...props }: any
+        { id, title, description, action, ...props }: ToasterToast
       ) {
         return (
           <Toast key={id} {...props}>

@@ -33,8 +33,8 @@ export async function withRetry<T>(
       
       // Don't retry on client errors (4xx)
       if (error && typeof error === 'object' && 'status' in error) {
-        const status = (error as any).status;
-        if (status >= 400 && status < 500) {
+        const status = (error as { status?: number }).status;
+        if (status !== undefined && status >= 400 && status < 500) {
           throw error;
         }
       }
@@ -52,9 +52,9 @@ export async function withRetry<T>(
 /**
  * Type-safe Supabase function invocation with retry logic
  */
-export async function invokeEdgeFunction<T = any>(
+export async function invokeEdgeFunction<T = unknown>(
   functionName: string,
-  body?: Record<string, any>,
+  body?: Record<string, unknown>,
   options: RetryOptions = {}
 ): Promise<T> {
   return withRetry(async () => {

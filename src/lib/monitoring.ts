@@ -12,7 +12,7 @@ export enum LogLevel {
 interface LogContext {
   userId?: string;
   sessionId?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 class Logger {
@@ -26,7 +26,7 @@ class Logger {
     this.context = {};
   }
 
-  private log(level: LogLevel, message: string, data?: any) {
+  private log(level: LogLevel, message: string, data?: unknown) {
     const logEntry = {
       timestamp: new Date().toISOString(),
       level,
@@ -48,19 +48,19 @@ class Logger {
     }
   }
 
-  debug(message: string, data?: any) {
+  debug(message: string, data?: unknown) {
     this.log(LogLevel.DEBUG, message, data);
   }
 
-  info(message: string, data?: any) {
+  info(message: string, data?: unknown) {
     this.log(LogLevel.INFO, message, data);
   }
 
-  warn(message: string, data?: any) {
+  warn(message: string, data?: unknown) {
     this.log(LogLevel.WARN, message, data);
   }
 
-  error(message: string, error?: Error | any) {
+  error(message: string, error?: Error | unknown) {
     this.log(LogLevel.ERROR, message, {
       error: error instanceof Error ? {
         message: error.message,

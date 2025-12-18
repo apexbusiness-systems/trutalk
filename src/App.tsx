@@ -55,6 +55,22 @@ function App() {
   const [isNative, setIsNative] = useState(false);
   const [ready, setReady] = useState(false);
 
+  // Memoize QueryClient to prevent recreation on every render
+  const queryClient = useMemo(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            retry: 1,
+            staleTime: 5 * 60 * 1000, // 5 minutes
+            gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+          },
+        },
+      }),
+    []
+  );
+
   useEffect(() => {
     // Check platform on mount
     setIsNative(isNativeApp());

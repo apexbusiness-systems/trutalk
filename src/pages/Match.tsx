@@ -1,35 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Match() {
-  const [loading, setLoading] = useState(true);
+  const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setLoading(false);
-      if (!session?.user) {
-        navigate("/auth");
-      }
-    });
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setLoading(false);
-      if (!session?.user) {
-        navigate("/auth");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
+  const handleSignOut = useCallback(async () => {
+    await signOut();
     navigate("/");
-  };
+  }, [signOut, navigate]);
+
+  const handleNavigateToProfile = useCallback(() => {
+    navigate("/profile");
+  }, [navigate]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -42,7 +34,7 @@ export default function Match() {
           TRU Talk
         </h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate("/profile")}>
+          <Button variant="outline" onClick={handleNavigateToProfile}>
             Profile
           </Button>
           <Button variant="ghost" onClick={handleSignOut}>

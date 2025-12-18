@@ -174,7 +174,7 @@ function useToast() {
         listeners.splice(index, 1);
       }
     };
-  }, [state]);
+  }, []); // Remove state dependency - listeners should persist across renders
 
   return {
     ...state,
