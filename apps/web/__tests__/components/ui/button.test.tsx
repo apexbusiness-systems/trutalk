@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
 import { Button } from '@/components/ui/button';
 
 describe('Button Component', () => {
@@ -8,11 +10,12 @@ describe('Button Component', () => {
     expect(screen.getByRole('button')).toHaveTextContent('Click me');
   });
 
-  it('calls onClick when clicked', () => {
+  it('calls onClick when clicked', async () => {
+    const user = userEvent.setup();
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
     
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 

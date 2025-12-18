@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDir": ".",
     "outDir": "./dist",
     "paths": {
       "@trutalk/shared": ["../../packages/shared/src/index.ts"],
