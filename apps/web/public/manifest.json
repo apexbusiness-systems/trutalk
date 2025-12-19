@@ -1,0 +1,19 @@
+{
+  "name": "TRU Talk - Voice Dating & Translation",
+  "short_name": "TRU Talk",
+  "description": "Real-time voice translation for authentic connections. Chat with anyone, anywhere, in any language.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait",
+  "categories": ["social", "dating", "communication"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
