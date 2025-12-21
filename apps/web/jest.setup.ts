@@ -20,9 +20,9 @@ jest.mock('next/navigation', () => ({
 
 // Mock Next.js Link
 jest.mock('next/link', () => {
-  return ({ children, href }) => {
-    return <a href={href}>{children}</a>;
+  const React = require('react');
+  return ({ children, href }: { children: React.ReactNode; href: string }) => {
+    return React.createElement('a', { href }, children);
   };
 });
-
 
