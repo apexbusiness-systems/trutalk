@@ -6,7 +6,7 @@
     "dev": "vercel dev",
     "build": "tsc",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.typecheck.json --noEmit"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.3",
