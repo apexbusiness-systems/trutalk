@@ -4,6 +4,8 @@
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "./dist",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["node"],
     "paths": {
       "@trutalk/shared": ["../../packages/shared/src/index.ts"],
       "@trutalk/shared/*": ["../../packages/shared/src/*"]

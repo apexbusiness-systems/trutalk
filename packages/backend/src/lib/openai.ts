@@ -14,20 +14,20 @@ export async function transcribeAudio(audioUrl: string): Promise<{
 }> {
   try {
     const response = await fetch(audioUrl);
-    const audioBuffer = await response.arrayBuffer();
-    const audioBlob = new Blob([audioBuffer], { type: 'audio/mpeg' });
-    const audioFile = new File([audioBlob], 'audio.mp3', { type: 'audio/mpeg' });
+    const audioBuffer = Buffer.from(await response.arrayBuffer());
+    
+    // OpenAI SDK accepts File-like objects or ReadableStream
+    const audioFile = new File([audioBuffer], 'audio.mp3', { type: 'audio/mpeg' });
 
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-1',
-      language: 'auto', // Auto-detect
       response_format: 'verbose_json',
     });
 
     return {
       text: transcription.text,
-      language: transcription.language || 'en',
+      language: (transcription as { language?: string }).language || 'en',
     };
   } catch (error) {
     console.error('OpenAI transcription error:', error);
