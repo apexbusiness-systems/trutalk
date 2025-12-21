@@ -18,7 +18,7 @@ export default function LoginScreen() {
       const { error } = await signIn(email, password);
       if (error) throw error;
       router.replace('/(tabs)');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
       // TODO: Show error toast
     } finally {
