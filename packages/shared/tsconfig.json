@@ -5,7 +5,9 @@
     "rootDir": ".",
     "outDir": "./dist",
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "lib": ["ES2020"],
+    "types": ["node"]
   },
   "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["node_modules", "dist", "../../src", "../../apps"]
