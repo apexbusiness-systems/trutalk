@@ -44,7 +44,7 @@ export function EmotionIndicator({ emotion, confidence = 0 }: EmotionIndicatorPr
   return (
     <View style={styles.container}>
       <View style={[styles.iconContainer, { backgroundColor: `${color}20` }]}>
-        <Ionicons name={icon as any} size={24} color={color} />
+        <Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={24} color={color} />
       </View>
       <View style={styles.textContainer}>
         <Text style={[styles.emotion, { color }]}>

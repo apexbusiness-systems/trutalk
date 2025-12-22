@@ -18,7 +18,7 @@ export default function LoginScreen() {
       const { error } = await signIn(email, password);
       if (error) throw error;
       router.replace('/(tabs)');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
       // TODO: Show error toast
     } finally {
@@ -71,7 +71,7 @@ export default function LoginScreen() {
           onPress={() => router.push('/(auth)/signup')}
         >
           <Text style={styles.linkText}>
-            Don't have an account? Sign up
+            Don&apos;t have an account? Sign up
           </Text>
         </TouchableOpacity>
       </View>

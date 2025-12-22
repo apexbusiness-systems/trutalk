@@ -12,7 +12,7 @@ interface MatchStatus {
 
 export default function MatchScreen() {
   const router = useRouter();
-  const [matchStatus, _setMatchStatus] = useState<MatchStatus>({ status: 'idle' });
+  const [matchStatus] = useState<MatchStatus>({ status: 'idle' });
 
   const handleStartCall = () => {
     if (matchStatus.matchId) {

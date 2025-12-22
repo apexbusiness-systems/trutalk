@@ -65,7 +65,7 @@ export function VoiceRecorder() {
         allowsRecordingIOS: false,
       });
       
-      const uri = recording.getURI();
+      recording.getURI(); // TODO: Use this URI for upload
       setRecording(null);
       
       // TODO: Upload to Supabase Storage and process
@@ -78,7 +78,6 @@ export function VoiceRecorder() {
         setIsProcessing(false);
       }, 1500);
       
-      console.log('Recording stopped and stored at', uri);
     } catch (err) {
       console.error('Failed to stop recording', err);
       setIsProcessing(false);
