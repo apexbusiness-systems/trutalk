@@ -12,7 +12,7 @@ export function VoiceWaveform({ isRecording = false, color = '#3b82f6' }: VoiceW
 
   useEffect(() => {
     if (isRecording) {
-      bars.forEach((bar, index) => {
+      bars.forEach((bar) => {
         bar.value = withRepeat(
           withTiming(Math.random() * 0.7 + 0.3, {
             duration: 300 + Math.random() * 200
@@ -38,7 +38,7 @@ export function VoiceWaveform({ isRecording = false, color = '#3b82f6' }: VoiceW
 
         return (
           <Animated.View
-            key={index}
+            key={`bar-${index}`}
             style={[styles.bar, animatedStyle]}
           />
         );

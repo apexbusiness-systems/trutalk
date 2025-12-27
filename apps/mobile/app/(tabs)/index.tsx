@@ -5,12 +5,10 @@ import { VoiceRecorder } from '@/components/voice/VoiceRecorder';
 import { DailyChallengeCard } from '@/components/engagement/DailyChallengeCard';
 import { StreakBadge } from '@/components/engagement/StreakBadge';
 import { VoiceWaveform } from '@/components/voice/VoiceWaveform';
-import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 
 export default function MatchScreen() {
-  const router = useRouter();
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording] = useState(false);
   const [onlineCount] = useState(127); // Will be real-time from Supabase
 
   const handleQuickMatch = () => {

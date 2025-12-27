@@ -4,7 +4,7 @@ import { useEngagementStore } from '@/stores/engagement';
 import * as Haptics from 'expo-haptics';
 
 export function DailyChallengeCard() {
-  const { dailyChallenge, completedToday, completeChallenge } = useEngagementStore();
+  const { dailyChallenge, completedToday } = useEngagementStore();
 
   const handleStart = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
