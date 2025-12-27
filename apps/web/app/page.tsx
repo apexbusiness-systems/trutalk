@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Globe, Mic, Users, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -61,7 +62,16 @@ export default function HomePage() {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-4 py-6 flex justify-between items-center relative z-10"
       >
-        <h1 className="text-2xl font-bold gradient-text">TRU Talk</h1>
+        <div className="flex items-center">
+          <Image
+            src="/images/trutalk-logo.svg"
+            alt="TRU Talk Logo"
+            width={140}
+            height={56}
+            priority
+            className="h-14 w-auto"
+          />
+        </div>
         <div className="flex gap-4">
           <Link href="/download">
             <Button variant="outline">Download App</Button>
@@ -138,24 +148,21 @@ export default function HomePage() {
                 >
                   {[
                     {
-                      icon: Globe,
-                      title: 'Break Language Barriers',
-                      description: 'Real-time voice translation lets you connect with anyone, anywhere.',
-                      color: 'primary',
+                      icon: '/images/icon-voice-matching.svg',
+                      title: 'Voice Matching',
+                      description: 'AI analyzes emotions and vibes in your voice',
                       delay: 1.0,
                     },
                     {
-                      icon: Mic,
-                      title: 'Authentic Conversations',
-                      description: 'Voice-first connections create deeper, more meaningful relationships.',
-                      color: 'secondary',
+                      icon: '/images/icon-break-barriers.svg',
+                      title: 'Break Barriers',
+                      description: 'Real-time translation in any language',
                       delay: 1.1,
                     },
                     {
-                      icon: Users,
-                      title: 'Global Community',
-                      description: 'Join thousands making cross-cultural connections daily.',
-                      color: 'accent',
+                      icon: '/images/icon-instant-calls.svg',
+                      title: 'Instant Calls',
+                      description: 'Jump straight to meaningful conversations',
                       delay: 1.2,
                     },
                   ].map((feature, index) => (
@@ -169,9 +176,15 @@ export default function HomePage() {
                     >
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
-                        className={`w-24 h-24 rounded-2xl bg-${feature.color}/10 flex items-center justify-center mb-6`}
+                        className="w-24 h-24 flex items-center justify-center mb-6"
                       >
-                        <feature.icon className={`w-12 h-12 text-${feature.color}`} />
+                        <Image
+                          src={feature.icon}
+                          alt={feature.title}
+                          width={96}
+                          height={96}
+                          className="w-full h-full"
+                        />
                       </motion.div>
                       <h4 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h4>
                       <p className="text-muted-foreground">{feature.description}</p>
