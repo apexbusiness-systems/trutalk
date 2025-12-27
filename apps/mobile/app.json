@@ -16,13 +16,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.trutalk.app",
+      "bundleIdentifier": "com.apexbusiness.trutalk",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "TRU Talk needs access to your microphone to record voice clips and make calls.",
         "NSCameraUsageDescription": "TRU Talk needs access to your camera for video calls.",
         "NSPhotoLibraryUsageDescription": "TRU Talk needs access to your photos to share profile pictures."
       },
       "associatedDomains": [
+        "applinks:trutalk.icu",
+        "applinks:www.trutalk.icu",
         "applinks:trutalk.com",
         "applinks:www.trutalk.com"
       ]
@@ -32,7 +34,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0a0a0a"
       },
-      "package": "com.trutalk.app",
+      "package": "com.apexbusiness.trutalk",
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA",
@@ -46,13 +48,11 @@
           "data": [
             {
               "scheme": "https",
-              "host": "trutalk.com",
-              "pathPrefix": "/call"
+              "host": "trutalk.icu",
+              "pathPrefix": "/auth/callback"
             },
             {
-              "scheme": "https",
-              "host": "www.trutalk.com",
-              "pathPrefix": "/call"
+              "scheme": "trutalk"
             }
           ],
           "category": [
