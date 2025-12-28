@@ -81,7 +81,9 @@ export default function MatchScreen() {
         </View>
         <View style={styles.tipItem}>
           <Ionicons name="heart" size={20} color="#3b82f6" />
-          <Text style={styles.tipText}>Be authentic - your voice tells your story</Text>
+          <Text style={styles.tipText}>
+            {'Be authentic - your voice tells your story'}
+          </Text>
         </View>
       </View>
     </ScrollView>
@@ -195,5 +197,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
 
