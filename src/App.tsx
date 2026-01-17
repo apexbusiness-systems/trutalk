@@ -10,6 +10,7 @@ const Landing = lazy(() => import("@/pages/Landing"));
 const Auth = lazy(() => import("@/pages/Auth"));
 const Match = lazy(() => import("@/pages/Match"));
 const Profile = lazy(() => import("@/pages/Profile"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,8 +32,9 @@ const LoadingFallback = () => (
 function NativeAppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/auth" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/match" element={<Match />} />
       <Route path="/profile" element={<Profile />} />
     </Routes>
@@ -45,6 +47,7 @@ function WebRoutes() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/match" element={<Match />} />
       <Route path="/profile" element={<Profile />} />
     </Routes>
