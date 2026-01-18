@@ -17,9 +17,19 @@ if [ ! -f "supabase/.temp/project-ref" ]; then
     echo "📍 Linking to Supabase project..."
 
     if [ -z "$SUPABASE_PROJECT_REF" ]; then
-        echo "❌ SUPABASE_PROJECT_REF environment variable not set"
-        echo "Please run: export SUPABASE_PROJECT_REF=your-project-ref"
-        exit 1
+        # Try to extract from SUPABASE_URL if available
+        if [ -n "$SUPABASE_URL" ]; then
+            echo "⚠️ SUPABASE_PROJECT_REF not set, attempting to extract from SUPABASE_URL..."
+            # Extract subdomain from URL (e.g., https://xyz.supabase.co -> xyz)
+            SUPABASE_PROJECT_REF=$(echo "$SUPABASE_URL" | sed -E 's/https?:\/\/([^\.]+)\.supabase\.co.*/\1/')
+        fi
+
+        if [ -z "$SUPABASE_PROJECT_REF" ]; then
+            echo "❌ SUPABASE_PROJECT_REF environment variable not set"
+            echo "Please run: export SUPABASE_PROJECT_REF=your-project-ref"
+            exit 1
+        fi
+        echo "✅ Extracted Project Ref: $SUPABASE_PROJECT_REF"
     fi
 
     supabase link --project-ref "$SUPABASE_PROJECT_REF"
