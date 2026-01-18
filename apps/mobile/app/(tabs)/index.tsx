@@ -2,19 +2,11 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { VoiceRecorder } from '@/components/voice/VoiceRecorder';
-import { DailyChallengeCard } from '@/components/engagement/DailyChallengeCard';
-import { StreakBadge } from '@/components/engagement/StreakBadge';
 import { VoiceWaveform } from '@/components/voice/VoiceWaveform';
-import * as Haptics from 'expo-haptics';
 
 export default function MatchScreen() {
   const [isRecording] = useState(false);
   const [onlineCount] = useState(127); // Will be real-time from Supabase
-
-  const handleQuickMatch = () => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    // Trigger instant match logic
-  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -27,11 +19,7 @@ export default function MatchScreen() {
             <Text style={styles.onlineText}>{onlineCount} online now</Text>
           </View>
         </View>
-        <StreakBadge />
       </View>
-
-      {/* Daily Challenge */}
-      <DailyChallengeCard />
 
       {/* Quick Match Section */}
       <View style={styles.quickMatchSection}>
@@ -40,7 +28,6 @@ export default function MatchScreen() {
 
         <TouchableOpacity
           style={styles.quickMatchButton}
-          onPress={handleQuickMatch}
           activeOpacity={0.8}
         >
           <View style={styles.pulseOuter}>
@@ -83,8 +70,6 @@ export default function MatchScreen() {
   );
 }
 
-
-
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
   content: { paddingBottom: 32 },
@@ -106,4 +91,3 @@ const styles = StyleSheet.create({
   tipItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   tipText: { fontSize: 14, color: '#e5e5e5', marginLeft: 12, flex: 1 },
 });
-
