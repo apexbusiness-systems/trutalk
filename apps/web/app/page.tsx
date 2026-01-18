@@ -74,8 +74,14 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-12 md:py-24">
           <div className="max-w-7xl mx-auto">
             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-background via-card to-background border border-border/50 p-8 md:p-16 shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-              
+              {/* Pulsing Red Background Glow */}
+              <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/30 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute top-0 left-1/4 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
+              </div>
+
               <div className="relative z-10">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -87,9 +93,9 @@ export default function HomePage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 gradient-text leading-[1.1]"
+                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 gradient-text leading-[1.1] font-display"
                   >
-                    Connect Through Voice
+                    Voice-First Dating
                   </motion.h2>
                   <motion.p
                     initial={{ opacity: 0 }}
@@ -97,7 +103,7 @@ export default function HomePage() {
                     transition={{ duration: 0.6, delay: 0.5 }}
                     className="text-lg md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed"
                   >
-                    Break language barriers with real-time voice translation. Make authentic connections worldwide.
+                    Connect through authentic voice. AI-powered matching. Real-time translation across 50+ languages.
                   </motion.p>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
