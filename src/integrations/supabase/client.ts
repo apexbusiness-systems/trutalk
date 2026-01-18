@@ -18,8 +18,7 @@ if (!SUPABASE_PUBLISHABLE_KEY) {
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    // @ts-ignore - localStorage may not be available in all environments
-    storage: typeof localStorage !== 'undefined' ? localStorage : undefined,
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
   }

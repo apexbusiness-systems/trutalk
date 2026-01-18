@@ -1,0 +1,2 @@
+﻿app/(tabs)/index.tsx(8,26): error TS2307: Cannot find module 'expo-haptics' or its corresponding type declarations.
+components/engagement/DailyChallengeCard.tsx(4,26): error TS2307: Cannot find module 'expo-haptics' or its corresponding type declarations.
