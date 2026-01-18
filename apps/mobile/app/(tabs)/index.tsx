@@ -57,7 +57,7 @@ export default function MatchScreen() {
       {/* Voice Recorder */}
       <View style={styles.recorderSection}>
         <Text style={styles.sectionTitle}>Record Your Voice</Text>
-        <Text style={styles.sectionSubtitle}>Share how you're feeling for better matches</Text>
+        <Text style={styles.sectionSubtitle}>Share how you&apos;re feeling for better matches</Text>
         <VoiceRecorder />
       </View>
 
@@ -83,14 +83,7 @@ export default function MatchScreen() {
   );
 }
 
-function TipItem({ icon, text }: { icon: any; text: string }) {
-  return (
-    <View style={styles.tipItem}>
-      <Ionicons name={icon} size={18} color="#3b82f6" />
-      <Text style={styles.tipText}>{text}</Text>
-    </View>
-  );
-}
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
