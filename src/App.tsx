@@ -8,6 +8,7 @@ import { isNativeApp } from "@/lib/platform";
 // Lazy load pages for code splitting and better performance
 const Landing = lazy(() => import("@/pages/Landing"));
 const Auth = lazy(() => import("@/pages/Auth"));
+const PhoneAuth = lazy(() => import("@/pages/PhoneAuth"));
 const Match = lazy(() => import("@/pages/Match"));
 const Profile = lazy(() => import("@/pages/Profile"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
@@ -34,6 +35,7 @@ function NativeAppRoutes() {
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/phone-auth" element={<PhoneAuth />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/match" element={<Match />} />
       <Route path="/profile" element={<Profile />} />
@@ -47,6 +49,7 @@ function WebRoutes() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/phone-auth" element={<PhoneAuth />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/match" element={<Match />} />
       <Route path="/profile" element={<Profile />} />
