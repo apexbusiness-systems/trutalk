@@ -89,11 +89,23 @@ export default function HomePage() {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="text-center mb-16"
                 >
+                  {/* Hero Logo */}
+                  <div className="flex justify-center mb-6">
+                    <motion.img
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2 }}
+                      src="/icons/trutalk-logo.png"
+                      alt="TRU Talk"
+                      className="h-32 md:h-40 lg:h-48 w-auto drop-shadow-2xl animate-pulse"
+                    />
+                  </div>
+
                   <motion.h2
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 gradient-text leading-[1.1] font-display"
+                    className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 gradient-text leading-[1.1] font-display"
                   >
                     Voice-First Dating
                   </motion.h2>
@@ -116,7 +128,7 @@ export default function HomePage() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <Button size="lg" className="text-lg px-10 py-7 h-auto shadow-lg hover:shadow-2xl transition-all">
+                        <Button size="lg" className="text-lg px-10 py-7 h-auto shadow-lg hover:shadow-2xl transition-all bg-gradient-to-r from-primary to-accent">
                           <Download className="mr-2" />
                           Download App
                         </Button>
@@ -127,7 +139,7 @@ export default function HomePage() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <Button size="lg" variant="outline" className="text-lg px-10 py-7 h-auto">
+                        <Button size="lg" variant="outline" className="text-lg px-10 py-7 h-auto hover:bg-primary/10 border-primary/30">
                           Learn More
                         </Button>
                       </motion.div>
@@ -140,28 +152,25 @@ export default function HomePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.9 }}
-                  className="grid md:grid-cols-3 gap-4"
+                  className="grid md:grid-cols-3 gap-6"
                 >
                   {[
                     {
-                      icon: Globe,
-                      title: 'Break Language Barriers',
-                      description: 'Real-time voice translation lets you connect with anyone, anywhere.',
-                      color: 'primary',
+                      img: '/icons/1.png',
+                      title: 'Authentic Conversations',
+                      description: 'Voice-first connections create deeper, more meaningful relationships.',
                       delay: 1.0,
                     },
                     {
-                      icon: Mic,
-                      title: 'Authentic Conversations',
-                      description: 'Voice-first connections create deeper, more meaningful relationships.',
-                      color: 'secondary',
+                      img: '/icons/2.png',
+                      title: 'Break Language Barriers',
+                      description: 'Real-time voice translation lets you connect with anyone, anywhere.',
                       delay: 1.1,
                     },
                     {
-                      icon: Users,
+                      img: '/icons/3.png',
                       title: 'Global Community',
                       description: 'Join thousands making cross-cultural connections daily.',
-                      color: 'accent',
                       delay: 1.2,
                     },
                   ].map((feature, index) => (
@@ -171,13 +180,17 @@ export default function HomePage() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: feature.delay }}
                       whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                      className="rounded-2xl bg-muted/50 p-8 flex flex-col items-center text-center cursor-pointer"
+                      className="rounded-2xl bg-card/50 backdrop-blur-sm p-8 flex flex-col items-center text-center cursor-pointer border border-primary/10 hover:border-primary/30 transition-all hover:bg-card/70 group"
                     >
                       <motion.div
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        className={`w-24 h-24 rounded-2xl bg-${feature.color}/10 flex items-center justify-center mb-6`}
+                        whileHover={{ scale: 1.1 }}
+                        className="w-24 h-24 mb-6"
                       >
-                        <feature.icon className={`w-12 h-12 text-${feature.color}`} />
+                        <img
+                          src={feature.img}
+                          alt={feature.title}
+                          className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,0,0,0.3)]"
+                        />
                       </motion.div>
                       <h4 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h4>
                       <p className="text-muted-foreground">{feature.description}</p>
