@@ -130,7 +130,7 @@ export default function Match() {
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isRecording]);
+  }, [isRecording, handleStopRecording]);
 
   // Audio level analyzer
   const analyzeAudio = useCallback(() => {

@@ -205,6 +205,7 @@ function mapLanguageCodeToGoogle(languageCode: string): string {
  * Analyze audio for emotion features (advanced)
  * In production, use specialized audio analysis libraries
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function analyzeVoiceEmotion(_audioBuffer: Buffer): Promise<{
   energy: number;
   pitch: number;

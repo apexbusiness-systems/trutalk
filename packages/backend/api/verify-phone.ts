@@ -46,7 +46,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Step 3: Create or get user
-    let { data: existingUser, error: fetchError } = await supabase
+    const { data: existingUser, error: fetchError } = await supabase
       .from('users')
       .select('*')
       .eq('phone_number', phone_number)
