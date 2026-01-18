@@ -63,10 +63,21 @@ export default function MatchScreen() {
 
       {/* Tips */}
       <View style={styles.tipsSection}>
-        <Text style={styles.tipsTitle}>💡 Matching Tips</Text>
-        <TipItem icon="mic" text="Speak clearly and express your emotions" />
-        <TipItem icon="time" text="Record 10-30 seconds for best results" />
-        <TipItem icon="heart" text="Be authentic - your voice tells your story" />
+        <Text style={styles.tipsTitle}>Tips for Better Matches</Text>
+        <View style={styles.tipItem}>
+          <Ionicons name="mic" size={20} color="#3b82f6" />
+          <Text style={styles.tipText}>Speak clearly and express your emotions</Text>
+        </View>
+        <View style={styles.tipItem}>
+          <Ionicons name="time" size={20} color="#3b82f6" />
+          <Text style={styles.tipText}>Record 5-30 seconds for best results</Text>
+        </View>
+        <View style={styles.tipItem}>
+          <Ionicons name="heart" size={20} color="#3b82f6" />
+          <Text style={styles.tipText}>
+            {'Be authentic - your voice tells your story'}
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -102,3 +113,4 @@ const styles = StyleSheet.create({
   tipItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   tipText: { fontSize: 14, color: '#e5e5e5', marginLeft: 12, flex: 1 },
 });
+
