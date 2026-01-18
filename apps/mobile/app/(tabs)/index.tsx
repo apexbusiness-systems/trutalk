@@ -1,74 +1,67 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { VoiceRecorder } from '@/components/voice/VoiceRecorder';
-import { useRouter } from 'expo-router';
-
-interface MatchStatus {
-  status: 'idle' | 'recording' | 'processing' | 'matching' | 'found';
-  matchId?: string;
-  similarity?: number;
-}
+import { DailyChallengeCard } from '@/components/engagement/DailyChallengeCard';
+import { StreakBadge } from '@/components/engagement/StreakBadge';
+import { VoiceWaveform } from '@/components/voice/VoiceWaveform';
+import * as Haptics from 'expo-haptics';
 
 export default function MatchScreen() {
-  const router = useRouter();
-  const [matchStatus] = useState<MatchStatus>({ status: 'idle' });
+  const [isRecording] = useState(false);
+  const [onlineCount] = useState(127); // Will be real-time from Supabase
 
-  const handleStartCall = () => {
-    if (matchStatus.matchId) {
-      router.push(`/call/${matchStatus.matchId}`);
-    }
+  const handleQuickMatch = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    // Trigger instant match logic
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Find Your Match</Text>
-        <Text style={styles.subtitle}>Record a voice clip to connect</Text>
+        <View>
+          <Text style={styles.title}>TRU Talk</Text>
+          <View style={styles.onlineBadge}>
+            <View style={styles.onlineDot} />
+            <Text style={styles.onlineText}>{onlineCount} online now</Text>
+          </View>
+        </View>
+        <StreakBadge />
       </View>
 
+      {/* Daily Challenge */}
+      <DailyChallengeCard />
+
+      {/* Quick Match Section */}
+      <View style={styles.quickMatchSection}>
+        <Text style={styles.sectionTitle}>Quick Match</Text>
+        <Text style={styles.sectionSubtitle}>Tap to find someone to talk to right now</Text>
+
+        <TouchableOpacity
+          style={styles.quickMatchButton}
+          onPress={handleQuickMatch}
+          activeOpacity={0.8}
+        >
+          <View style={styles.pulseOuter}>
+            <View style={styles.pulseInner}>
+              <Ionicons name="mic" size={32} color="#fff" />
+            </View>
+          </View>
+          <Text style={styles.quickMatchText}>Start Matching</Text>
+        </TouchableOpacity>
+
+        <VoiceWaveform isRecording={isRecording} />
+      </View>
+
+      {/* Voice Recorder */}
       <View style={styles.recorderSection}>
+        <Text style={styles.sectionTitle}>Record Your Voice</Text>
+        <Text style={styles.sectionSubtitle}>Share how you're feeling for better matches</Text>
         <VoiceRecorder />
       </View>
 
-      {/* Match Status */}
-      {matchStatus.status === 'processing' && (
-        <View style={styles.statusCard}>
-          <ActivityIndicator size="large" color="#3b82f6" />
-          <Text style={styles.statusText}>Processing your voice...</Text>
-        </View>
-      )}
-
-      {matchStatus.status === 'matching' && (
-        <View style={styles.statusCard}>
-          <ActivityIndicator size="large" color="#3b82f6" />
-          <Text style={styles.statusText}>Finding your match...</Text>
-        </View>
-      )}
-
-      {matchStatus.status === 'found' && matchStatus.similarity && (
-        <View style={styles.matchFoundCard}>
-          <View style={styles.matchHeader}>
-            <Ionicons name="heart" size={32} color="#ec4899" />
-            <Text style={styles.matchTitle}>Match Found!</Text>
-          </View>
-          <Text style={styles.matchScore}>
-            {Math.round(matchStatus.similarity * 100)}% Compatibility
-          </Text>
-          <Text style={styles.matchDescription}>
-            Great emotional match! Start a conversation now.
-          </Text>
-          <TouchableOpacity
-            style={styles.callButton}
-            onPress={handleStartCall}
-          >
-            <Ionicons name="call" size={20} color="#fff" />
-            <Text style={styles.callButtonText}>Start Call</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Tips Section */}
+      {/* Tips */}
       <View style={styles.tipsSection}>
         <Text style={styles.tipsTitle}>Tips for Better Matches</Text>
         <View style={styles.tipItem}>
@@ -90,111 +83,34 @@ export default function MatchScreen() {
   );
 }
 
+function TipItem({ icon, text }: { icon: any; text: string }) {
+  return (
+    <View style={styles.tipItem}>
+      <Ionicons name={icon} size={18} color="#3b82f6" />
+      <Text style={styles.tipText}>{text}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0a0a0a',
-  },
-  contentContainer: {
-    paddingBottom: 32,
-  },
-  header: {
-    padding: 24,
-    paddingTop: 60,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#999',
-  },
-  recorderSection: {
-    padding: 24,
-    alignItems: 'center',
-  },
-  statusCard: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    padding: 24,
-    margin: 24,
-    alignItems: 'center',
-  },
-  statusText: {
-    color: '#fff',
-    fontSize: 16,
-    marginTop: 12,
-  },
-  matchFoundCard: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    padding: 24,
-    margin: 24,
-    borderWidth: 2,
-    borderColor: '#ec4899',
-  },
-  matchHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  matchTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginLeft: 12,
-  },
-  matchScore: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#ec4899',
-    marginBottom: 8,
-  },
-  matchDescription: {
-    fontSize: 14,
-    color: '#999',
-    marginBottom: 16,
-  },
-  callButton: {
-    backgroundColor: '#3b82f6',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  callButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  tipsSection: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    padding: 20,
-    margin: 24,
-    marginTop: 0,
-  },
-  tipsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 16,
-  },
-  tipItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  tipText: {
-    fontSize: 14,
-    color: '#999',
-    marginLeft: 12,
-    flex: 1,
-  },
+  container: { flex: 1, backgroundColor: '#0a0a0a' },
+  content: { paddingBottom: 32 },
+  header: { padding: 24, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  title: { fontSize: 32, fontWeight: 'bold', color: '#fff' },
+  onlineBadge: { flexDirection: 'row', alignItems: 'center', marginTop: 8 },
+  onlineDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#22c55e', marginRight: 6 },
+  onlineText: { fontSize: 14, color: '#999' },
+  quickMatchSection: { backgroundColor: '#1a1a1a', borderRadius: 16, padding: 24, marginHorizontal: 24, marginTop: 16, alignItems: 'center' },
+  sectionTitle: { fontSize: 20, fontWeight: '700', color: '#fff', textAlign: 'center' },
+  sectionSubtitle: { fontSize: 14, color: '#999', marginTop: 4, textAlign: 'center', marginBottom: 24 },
+  quickMatchButton: { alignItems: 'center', marginBottom: 24 },
+  pulseOuter: { width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(59, 130, 246, 0.1)', justifyContent: 'center', alignItems: 'center' },
+  pulseInner: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#3b82f6', justifyContent: 'center', alignItems: 'center' },
+  quickMatchText: { fontSize: 18, fontWeight: '600', color: '#fff', marginTop: 16 },
+  recorderSection: { padding: 24 },
+  tipsSection: { backgroundColor: '#1a1a1a', borderRadius: 16, padding: 20, marginHorizontal: 24, marginTop: 16 },
+  tipsTitle: { fontSize: 18, fontWeight: '600', color: '#fff', marginBottom: 16 },
+  tipItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  tipText: { fontSize: 14, color: '#e5e5e5', marginLeft: 12, flex: 1 },
 });
 
