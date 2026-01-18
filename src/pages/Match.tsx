@@ -115,6 +115,28 @@ export default function Match() {
     };
   }, [navigate]);
 
+  const handleStopRecording = useCallback(() => {
+    // Stop audio analysis
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop());
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+    }
+
+    setIsRecording(false);
+    setAudioLevel(0);
+    setMatchState("processing");
+
+    // Simulate processing
+    setTimeout(() => {
+      setMatchState("matched");
+    }, 2000);
+  }, []);
+
   // Recording timer
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -177,27 +199,7 @@ export default function Match() {
     }
   }, [analyzeAudio]);
 
-  const handleStopRecording = useCallback(() => {
-    // Stop audio analysis
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach(track => track.stop());
-    }
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-    }
 
-    setIsRecording(false);
-    setAudioLevel(0);
-    setMatchState("processing");
-
-    // Simulate processing
-    setTimeout(() => {
-      setMatchState("matched");
-    }, 2000);
-  }, []);
 
   if (loading) {
     return (
