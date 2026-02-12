@@ -48,6 +48,27 @@ export function PhoneVerificationForm({
     return digits.length >= 6 && digits.length <= 15;
   };
 
+  // Helper for sending verification requests
+  const sendVerificationRequest = async (
+    phone_number: string,
+    verification_code?: string,
+    defaultErrorMessage = "Failed to send verification code"
+  ) => {
+    const response = await fetch(`${apiBaseUrl}/api/verify-phone`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone_number, verification_code }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || defaultErrorMessage);
+    }
+
+    return data;
+  };
+
   // Handle resend cooldown timer
   useEffect(() => {
     if (resendCooldown > 0) {
@@ -72,17 +93,11 @@ export function PhoneVerificationForm({
     setLoading(true);
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/verify-phone`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone_number: getFullPhoneNumber() }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to send verification code");
-      }
+      await sendVerificationRequest(
+        getFullPhoneNumber(),
+        undefined,
+        "Failed to send verification code"
+      );
 
       toast({
         title: "Code sent!",
@@ -157,20 +172,11 @@ export function PhoneVerificationForm({
     setLoading(true);
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/verify-phone`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone_number: getFullPhoneNumber(),
-          verification_code: code,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Invalid verification code");
-      }
+      const data = await sendVerificationRequest(
+        getFullPhoneNumber(),
+        code,
+        "Invalid verification code"
+      );
 
       setStep("verified");
       toast({
@@ -201,17 +207,11 @@ export function PhoneVerificationForm({
     setLoading(true);
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/verify-phone`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone_number: getFullPhoneNumber() }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to resend code");
-      }
+      await sendVerificationRequest(
+        getFullPhoneNumber(),
+        undefined,
+        "Failed to resend code"
+      );
 
       toast({
         title: "Code resent!",
