@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Ionicons } from '@expo/vector-icons';
 
 export function Toast() {
-  const { message, type, visible, hide } = useToast();
+  const { message, type, visible } = useToast();
   const insets = useSafeAreaInsets();
   const translateY = useSharedValue(-100);
   const opacity = useSharedValue(0);
