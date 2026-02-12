@@ -30,13 +30,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .lt('expires_at', new Date().toISOString());
 
     if (expiredClips && expiredClips.length > 0) {
-      // Delete from storage
-      for (const clip of expiredClips) {
-        try {
-          await supabase.storage.from('voice-clips').remove([clip.storage_path]);
-        } catch (storageError) {
-          console.error('Failed to delete storage file:', clip.storage_path, storageError);
+      // Delete from storage (batch)
+      const storagePaths = expiredClips.map(clip => clip.storage_path);
+      try {
+        const { error: storageError } = await supabase.storage.from('voice-clips').remove(storagePaths);
+        if (storageError) {
+          console.error('Failed to delete storage files:', storageError);
         }
+      } catch (storageError) {
+        console.error('Unexpected error during storage cleanup:', storageError);
       }
 
       // Delete from database
@@ -71,15 +73,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .lt('ended_at', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString());
 
     if (oldCalls && oldCalls.length > 0) {
-      for (const call of oldCalls) {
-        if (call.daily_room_name) {
-          try {
-            await deleteCallRoom(call.daily_room_name);
-          } catch (dailyError) {
-            console.error('Failed to delete Daily room:', call.daily_room_name);
+      await Promise.all(
+        oldCalls.map(async (call) => {
+          if (call.daily_room_name) {
+            try {
+              await deleteCallRoom(call.daily_room_name);
+            } catch (dailyError) {
+              console.error('Failed to delete Daily room:', call.daily_room_name);
+            }
           }
-        }
-      }
+        })
+      );
       console.log(`Cleaned up ${oldCalls.length} Daily.co rooms`);
     }
 
