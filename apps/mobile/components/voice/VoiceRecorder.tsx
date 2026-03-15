@@ -4,8 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { Waveform } from './Waveform';
 import { EmotionIndicator } from './EmotionIndicator';
+import { useAuth } from '../../hooks/use-auth';
+import { useToast } from '../../hooks/use-toast';
+import { supabase } from '../../lib/supabase';
 
 export function VoiceRecorder() {
+  const { user } = useAuth();
+  const toast = useToast();
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
@@ -60,16 +65,58 @@ export function VoiceRecorder() {
     setIsProcessing(true);
     
     try {
-      await recording.stopAndUnloadAsync();
+      const status = await recording.stopAndUnloadAsync();
+      const durationMillis = status.durationMillis;
+
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
       });
       
-      recording.getURI(); // TODO: Use this URI for upload
+      const uri = recording.getURI();
       setRecording(null);
       
-      // TODO: Upload to Supabase Storage and process
-      // Simulate emotion detection
+      if (!uri) {
+        throw new Error('No recording URI available');
+      }
+
+      if (!user) {
+        toast.show('Please log in to save recordings', 'error');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Upload to Supabase Storage
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const filePath = `${user.id}/${Date.now()}.m4a`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('voice-clips')
+        .upload(filePath, blob, {
+          contentType: 'audio/m4a',
+          upsert: false,
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Create database record
+      const { error: dbError } = await supabase.from('voice_clips').insert({
+        user_id: user.id,
+        storage_path: filePath,
+        duration_seconds: durationMillis / 1000,
+        file_size_bytes: blob.size,
+        processing_status: 'pending',
+      });
+
+      if (dbError) {
+        throw dbError;
+      }
+
+      toast.show('Recording saved', 'success');
+
+      // Simulate emotion detection (while backend processes)
       setTimeout(() => {
         const emotions = ['happy', 'excited', 'calm', 'romantic', 'playful'];
         const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
@@ -79,7 +126,8 @@ export function VoiceRecorder() {
       }, 1500);
       
     } catch (err) {
-      console.error('Failed to stop recording', err);
+      console.error('Failed to stop/upload recording', err);
+      toast.show('Failed to save recording', 'error');
       setIsProcessing(false);
     }
   }

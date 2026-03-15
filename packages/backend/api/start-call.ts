@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
+import { verifyUser } from '../src/lib/auth';
 import { createCallRoom, getMeetingToken } from '../src/lib/daily';
 import { startCallSchema } from '../../shared/src/validators';
 import { createErrorResponse, APIError } from '../../shared/src/utils';
@@ -18,9 +19,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Verify user identity
+    const authenticatedUserId = await verifyUser(req);
+
     // Validate request
     const body = startCallSchema.parse(req.body);
     const { match_id, user_id } = body;
+
+    // Security check: ensure user_id in body matches authenticated user
+    if (user_id !== authenticatedUserId) {
+      throw new APIError(403, 'Unauthorized user ID', 'UNAUTHORIZED');
+    }
 
     // Get match details
     const { data: match, error: matchError } = await supabase
@@ -34,7 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Verify user is part of this match
-    if (match.user_id_1 !== user_id && match.user_id_2 !== user_id) {
+    if (match.user_id_1 !== authenticatedUserId && match.user_id_2 !== authenticatedUserId) {
       throw new APIError(403, 'User not part of this match', 'UNAUTHORIZED');
     }
 

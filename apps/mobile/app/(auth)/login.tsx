@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { signIn } = useAuth();
+  const toast = useToast();
 
   const handleLogin = async () => {
     if (!email || !password) return;
@@ -20,7 +22,8 @@ export default function LoginScreen() {
       router.replace('/(tabs)');
     } catch (error: unknown) {
       console.error('Login error:', error);
-      // TODO: Show error toast
+      const message = error instanceof Error ? error.message : 'Login failed';
+      toast.show(message, 'error');
     } finally {
       setLoading(false);
     }

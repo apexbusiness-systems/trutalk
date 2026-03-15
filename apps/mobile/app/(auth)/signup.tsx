@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SignupScreen() {
   const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ export default function SignupScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { signUp } = useAuth();
+  const toast = useToast();
 
   const handleSignup = async () => {
     if (!email || !password) return;
@@ -20,6 +22,8 @@ export default function SignupScreen() {
       router.replace('/(tabs)');
     } catch (error: unknown) {
       console.error('Signup error:', error);
+      const message = error instanceof Error ? error.message : 'Signup failed';
+      toast.show(message, 'error');
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../src/lib/supabase';
+import { verifyUser } from '../src/lib/auth';
 import { findMatchSchema } from '../../shared/src/validators';
 import { createErrorResponse, APIError } from '../../shared/src/utils';
 
@@ -17,19 +18,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Verify user identity
+    const authenticatedUserId = await verifyUser(req);
+
     // Validate request
     const body = findMatchSchema.parse(req.body);
     const { user_id, voice_clip_id } = body;
 
-    // Get user's voice clip with emotion vector
+    // Security check: ensure user_id in body matches authenticated user
+    if (user_id !== authenticatedUserId) {
+      throw new APIError(403, 'Unauthorized user ID', 'UNAUTHORIZED');
+    }
+
+    // Get user's voice clip with emotion vector and verify ownership
     const { data: userClip, error: clipError } = await supabase
       .from('voice_clips')
-      .select('emotion_vector, emotion_labels')
+      .select('emotion_vector, emotion_labels, user_id')
       .eq('id', voice_clip_id)
       .single();
 
     if (clipError || !userClip || !userClip.emotion_vector) {
       throw new APIError(400, 'Voice clip not found or not processed', 'CLIP_NOT_READY');
+    }
+
+    if (userClip.user_id !== authenticatedUserId) {
+      throw new APIError(403, 'Unauthorized voice clip access', 'UNAUTHORIZED');
     }
 
     // Call database function to find matches
