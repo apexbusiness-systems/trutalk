@@ -110,12 +110,41 @@ function PremiumFeatureCard({ icon: Icon, title, description, locked = true }: {
     );
 }
 
+
+
+type DashboardStats = {
+    streakCount: number;
+    totalMatches: number;
+    totalMinutes: number;
+    echoChips: number;
+    weeklyGrowth: number;
+    tier: "free" | "premium" | "vip";
+};
+
+type UserMetricsRow = {
+    streak_count: number | null;
+    total_minutes: number | null;
+    echo_chips: number | null;
+    subscription_tier: "free" | "premium" | "vip" | null;
+};
+
+type RecentMatchRow = {
+    id: string;
+    created_at: string;
+    status: string | null;
+    similarity_score: number | null;
+};
+
+type WeeklyCallRow = {
+    created_at: string;
+};
+
 export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const [stats, setStats] = useState({
+    const [stats, setStats] = useState<DashboardStats>({
         streakCount: 7,
         totalMatches: 0,
         totalMinutes: 0,
@@ -137,26 +166,27 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchDashboardData = async (userId: string) => {
+            const db = supabase as any; // generated root types are incomplete, so use runtime query client with explicit row typing here.
             setError(null);
 
             const [userResult, totalMatchesResult, recentMatchesResult, weeklyCallsResult, previousWeeklyCallsResult] = await Promise.all([
-                supabase.from("users").select("streak_count,total_minutes,echo_chips,subscription_tier").eq("id", userId).single(),
-                supabase
+                db.from("users").select("streak_count,total_minutes,echo_chips,subscription_tier").eq("id", userId).single(),
+                db
                     .from("matches")
                     .select("id", { count: "exact", head: true })
                     .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`),
-                supabase
+                db
                     .from("matches")
                     .select("id,created_at,status,similarity_score")
                     .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
                     .order("created_at", { ascending: false })
                     .limit(4),
-                supabase
+                db
                     .from("calls")
                     .select("created_at,duration_seconds")
                     .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
                     .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
-                supabase
+                db
                     .from("calls")
                     .select("id", { count: "exact", head: true })
                     .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
@@ -169,10 +199,10 @@ export default function Dashboard() {
                 return;
             }
 
-            const user = userResult.data;
-            const matches = recentMatchesResult.data ?? [];
+            const user = userResult.data as UserMetricsRow | null;
+            const matches = (recentMatchesResult.data ?? []) as RecentMatchRow[];
             const totalMatches = totalMatchesResult.count ?? 0;
-            const weeklyCalls = weeklyCallsResult.data ?? [];
+            const weeklyCalls = (weeklyCallsResult.data ?? []) as WeeklyCallRow[];
             const previousWeekCount = previousWeeklyCallsResult.count ?? 0;
 
             const weekByDay = Array(7).fill(0);
@@ -195,7 +225,7 @@ export default function Dashboard() {
 
             setRecentMatches(matches.map((match) => ({
                 name: `Voice Echo #${match.id.slice(0, 4)}`,
-                emotion: match.status,
+                emotion: match.status ?? "Unknown",
                 time: formatRelativeTime(match.created_at),
                 premium: (match.similarity_score ?? 0) < 0.75 && (user?.subscription_tier ?? "free") === "free",
             })));
