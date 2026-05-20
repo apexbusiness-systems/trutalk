@@ -75,7 +75,7 @@ export async function invokeEdgeFunction<T = any>(
  */
 export async function checkHealth(): Promise<boolean> {
   try {
-    const { error } = await supabase.from('profiles').select('id').limit(1).single();
+    const { error } = await (supabase as any).from('profiles').select('id').limit(1).single();
     return !error || error.code === 'PGRST116'; // PGRST116 = no rows returned (acceptable)
   } catch {
     return false;

@@ -13,12 +13,13 @@
     "test": "jest --passWithNoTests",
     "lint": "eslint . --ext .ts,.tsx",
     "deploy:supabase": "./scripts/deploy-supabase.sh",
-    "deploy:backend": "./scripts/deploy-backend.sh",
-    "deploy:staging": "./scripts/deploy-staging.sh",
-    "deploy:production": "./scripts/deploy-production.sh",
     "db:migrate": "cd supabase && supabase db push",
     "db:reset": "cd supabase && supabase db reset",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "deploy:cloudflare": "./scripts/deploy-cloudflare.sh",
+    "deploy:production": "./scripts/deploy-cloudflare.sh",
+    "test:unit": "npm run test",
+    "test:integration": "npm run test"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.2",
@@ -58,8 +59,6 @@
     "@radix-ui/react-toast": "^1.2.15",
     "@supabase/supabase-js": "^2.105.4",
     "@tanstack/react-query": "^5.90.10",
-    "@types/react": "^18.3.27",
-    "@types/react-dom": "^18.3.7",
     "@vercel/node": "^5.5.8",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.22",
