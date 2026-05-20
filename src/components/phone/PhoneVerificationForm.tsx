@@ -253,7 +253,7 @@ export function PhoneVerificationForm({
               </div>
               <h2 className="text-2xl font-bold text-foreground">Enter your phone</h2>
               <p className="text-muted-foreground">
-                We'll send you a verification code
+                We&apos;ll send you a verification code
               </p>
             </div>
 
@@ -424,9 +424,9 @@ export function PhoneVerificationForm({
             >
               <CheckCircle2 className="w-10 h-10 text-primary" />
             </motion.div>
-            <h2 className="text-2xl font-bold text-foreground">You're verified!</h2>
+            <h2 className="text-2xl font-bold text-foreground">You&apos;re verified!</h2>
             <p className="text-muted-foreground">
-              Welcome to TRU Talk. Let's find your voice.
+              Welcome to TRU Talk. Let&apos;s find your voice.
             </p>
           </motion.div>
         )}
