@@ -18,7 +18,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "deploy:cloudflare": "./scripts/deploy-cloudflare.sh",
     "deploy:production": "./scripts/deploy-cloudflare.sh",
-    "test:unit": "npm run test"
+    "test:unit": "npm run test",
+    "test:integration": "npm run test"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.2",
