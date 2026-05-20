@@ -112,38 +112,113 @@ function PremiumFeatureCard({ icon: Icon, title, description, locked = true }: {
 
 export default function Dashboard() {
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    // Mock data (would come from API)
-    const stats = {
+    const [stats, setStats] = useState({
         streakCount: 7,
-        totalMatches: 42,
-        totalMinutes: 186,
-        echoChips: 250,
-        weeklyGrowth: 23,
+        totalMatches: 0,
+        totalMinutes: 0,
+        echoChips: 0,
+        weeklyGrowth: 0,
         tier: "free" as const,
+    });
+
+    const [recentMatches, setRecentMatches] = useState<Array<{ name: string; emotion: string; time: string; premium: boolean }>>([]);
+    const [weeklyBars, setWeeklyBars] = useState<number[]>([5, 5, 5, 5, 5, 5, 5]);
+
+    const formatRelativeTime = (isoDate: string) => {
+        const diffMs = Date.now() - new Date(isoDate).getTime();
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        if (hours < 1) return "just now";
+        if (hours < 24) return `${hours}h ago`;
+        return `${Math.floor(hours / 24)}d ago`;
     };
 
-    const recentMatches = [
-        { name: "Voice Echo #1247", emotion: "Romantic", time: "2h ago", premium: false },
-        { name: "Voice Echo #1198", emotion: "Playful", time: "5h ago", premium: false },
-        { name: "Voice Echo #1156", emotion: "Calm", time: "1d ago", premium: true },
-        { name: "Voice Echo #1089", emotion: "Excited", time: "2d ago", premium: true },
-    ];
-
     useEffect(() => {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setLoading(false);
-            if (!session?.user) {
-                navigate("/auth");
+        const fetchDashboardData = async (userId: string) => {
+            setError(null);
+
+            const [userResult, totalMatchesResult, recentMatchesResult, weeklyCallsResult, previousWeeklyCallsResult] = await Promise.all([
+                supabase.from("users").select("streak_count,total_minutes,echo_chips,subscription_tier").eq("id", userId).single(),
+                supabase
+                    .from("matches")
+                    .select("id", { count: "exact", head: true })
+                    .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`),
+                supabase
+                    .from("matches")
+                    .select("id,created_at,status,similarity_score")
+                    .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
+                    .order("created_at", { ascending: false })
+                    .limit(4),
+                supabase
+                    .from("calls")
+                    .select("created_at,duration_seconds")
+                    .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
+                    .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+                supabase
+                    .from("calls")
+                    .select("id", { count: "exact", head: true })
+                    .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
+                    .gte("created_at", new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
+                    .lt("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+            ]);
+
+            if (userResult.error || totalMatchesResult.error || recentMatchesResult.error || weeklyCallsResult.error || previousWeeklyCallsResult.error) {
+                setError("Unable to load live dashboard metrics right now.");
+                return;
             }
+
+            const user = userResult.data;
+            const matches = recentMatchesResult.data ?? [];
+            const totalMatches = totalMatchesResult.count ?? 0;
+            const weeklyCalls = weeklyCallsResult.data ?? [];
+            const previousWeekCount = previousWeeklyCallsResult.count ?? 0;
+
+            const weekByDay = Array(7).fill(0);
+            weeklyCalls.forEach((call) => {
+                const dayIndex = (new Date(call.created_at).getDay() + 6) % 7;
+                weekByDay[dayIndex] += 1;
+            });
+
+            const maxDayCalls = Math.max(...weekByDay, 1);
+            setWeeklyBars(weekByDay.map((dayCount) => Math.max(8, Math.round((dayCount / maxDayCalls) * 100))));
+
+            setStats({
+                streakCount: user?.streak_count ?? 0,
+                totalMatches,
+                totalMinutes: user?.total_minutes ?? 0,
+                echoChips: user?.echo_chips ?? 0,
+                weeklyGrowth: previousWeekCount === 0 ? (weeklyCalls.length > 0 ? 100 : 0) : Math.round(((weeklyCalls.length - previousWeekCount) / previousWeekCount) * 100),
+                tier: (user?.subscription_tier as "free" | "premium" | "vip" | null) ?? "free",
+            });
+
+            setRecentMatches(matches.map((match) => ({
+                name: `Voice Echo #${match.id.slice(0, 4)}`,
+                emotion: match.status,
+                time: formatRelativeTime(match.created_at),
+                premium: (match.similarity_score ?? 0) < 0.75 && (user?.subscription_tier ?? "free") === "free",
+            })));
+        };
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session?.user) {
+                setLoading(false);
+                navigate("/auth");
+                return;
+            }
+
+            fetchDashboardData(session.user.id).finally(() => setLoading(false));
         });
 
         supabase.auth.getSession().then(({ data: { session } }) => {
-            setLoading(false);
             if (!session?.user) {
+                setLoading(false);
                 navigate("/auth");
+                return;
             }
+
+            fetchDashboardData(session.user.id).finally(() => setLoading(false));
         });
 
         return () => subscription.unsubscribe();
@@ -238,6 +313,11 @@ export default function Dashboard() {
                             </Button>
                         </div>
                         <div className="space-y-3">
+                            {recentMatches.length === 0 && (
+                                <div className="p-4 rounded-xl bg-card/30 border border-border/50 text-sm text-muted-foreground">
+                                    No recent matches yet. Record your voice to get matched.
+                                </div>
+                            )}
                             {recentMatches.map((match, i) => (
                                 <MatchCard key={i} {...match} />
                             ))}
@@ -291,11 +371,12 @@ export default function Dashboard() {
                             <h3 className="text-lg font-semibold text-foreground">This Week</h3>
                             <span className="flex items-center gap-1 text-sm text-green-500">
                                 <TrendingUp className="w-4 h-4" />
-                                +{stats.weeklyGrowth}%
+                                {stats.weeklyGrowth > 0 ? "+" : ""}{stats.weeklyGrowth}%
                             </span>
                         </div>
+                        {error && <p className="text-xs text-destructive mb-2">{error}</p>}
                         <div className="flex items-end gap-2 h-24">
-                            {[40, 65, 45, 80, 55, 90, 70].map((height, i) => (
+                            {weeklyBars.map((height, i) => (
                                 <div
                                     key={i}
                                     className="flex-1 bg-gradient-to-t from-primary to-accent rounded-t-lg transition-all hover:opacity-80"
